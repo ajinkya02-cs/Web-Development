@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1e3d58;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #1e3d58;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f9;
+        }
+
+        /* Image styling */
+        .image-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .image-section img {
+            width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin: 0 15px;
+        }
+
+        .image-section h2 {
+            color: #1e3d58;
+            font-size: 1.5rem;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bank Management System</h1>
+    </header>
+    
+    <div class="container">
+        <!-- Images Section -->
+        <div class="image-section">
+            <h2>Welcome to Our Bank</h2>
+            <img src="bank.jpg" alt="Bank Image 1">
+            <img src="bank1.jpg" alt="Bank Image 2">
+            <img src="bank2.jpg" alt="Bank Image 3">
+        </div>
+
+        <div class="section">
+            <h2>Create Account</h2>
+            <form id="createAccountForm">
+                <input type="text" id="accountHolderName" placeholder="Account Holder Name" required>
+                <input type="number" id="initialDeposit" placeholder="Initial Deposit" required>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Manage Account</h2>
+            <form id="accountManagementForm">
+                <input type="number" id="accountId" placeholder="Account ID" required>
+                <button type="button" onclick="viewAccountDetails()">View Account</button>
+            </form>
+            <div id="accountDetails"></div>
+        </div>
+
+        <div class="section">
+            <h2>Transactions</h2>
+            <form id="transactionForm">
+                <input type="number" id="accountIdTrans" placeholder="Account ID" required>
+                <input type="number" id="transactionAmount" placeholder="Amount" required>
+                <button type="button" onclick="depositMoney()">Deposit</button>
+                <button type="button" onclick="withdrawMoney()">Withdraw</button>
+            </form>
+            <div id="transactionMessage"></div>
+        </div>
+
+        <div class="section">
+            <h2>Fixed Deposit</h2>
+            <form id="fdForm">
+                <input type="number" id="fdAccountId" placeholder="Account ID" required>
+                <input type="number" id="fdAmount" placeholder="FD Amount" required>
+                <input type="number" id="fdDuration" placeholder="FD Duration (Months)" required>
+                <button type="button" onclick="createFixedDeposit()">Create Fixed Deposit</button>
+            </form>
+            <div id="fdMessage"></div>
+        </div>
+
+        <div class="section">
+            <h2>Delete Account</h2>
+            <form id="deleteAccountForm">
+                <input type="number" id="deleteAccountId" placeholder="Account ID to Delete" required>
+                <button type="button" onclick="deleteAccount()">Delete Account</button>
+            </form>
+            <div id="deleteMessage"></div>
+        </div>
+
+        <div class="section">
+            <h2>Created Accounts</h2>
+            <table id="accountsTable">
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>Name</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Account details will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="button-container">
+            <button onclick="updateAccountsTable()">Refresh Accounts List</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Bank Management System</p>
+    </footer>
+
+    <script>
+        // Simulate database using localStorage
+        if (!localStorage.getItem('accounts')) {
+            localStorage.setItem('accounts', JSON.stringify([]));
+        }
+
+        // Account Creation
+        document.getElementById('createAccountForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const name = document.getElementById('accountHolderName').value;
+            const initialDeposit = parseFloat(document.getElementById('initialDeposit').value);
+            
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            const accountId = accounts.length + 1; // Simple incremental Account ID
+            const newAccount = {
+                accountId,
+                name,
+                balance: initialDeposit,
+                transactions: [{ type: 'Deposit', amount: initialDeposit }]
+            };
+            
+            accounts.push(newAccount);
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+
+            alert(`Account created successfully! Account ID: ${accountId}`);
+            document.getElementById('createAccountForm').reset();
+
+            // Update the accounts table
+            updateAccountsTable();
+        });
+
+        // Update the accounts table with the list of created accounts
+        function updateAccountsTable() {
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            const tableBody = document.querySelector('#accountsTable tbody');
+            tableBody.innerHTML = '';
+
+            // Filter out invalid accounts (e.g., undefined or incomplete data)
+            const validAccounts = accounts.filter(account => account && account.accountId && account.name && account.balance != null);
+            
+            validAccounts.forEach(account => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${account.accountId}</td>
+                    <td>${account.name}</td>
+                    <td>$${account.balance}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // View Account Details
+        function viewAccountDetails() {
+            const accountId = parseInt(document.getElementById('accountId').value);
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            
+            const account = accounts.find(acc => acc.accountId === accountId);
+            
+            const accountDetails = document.getElementById('accountDetails');
+            if (account) {
+                accountDetails.innerHTML = `
+                    <p>Account ID: ${account.accountId}</p>
+                    <p>Name: ${account.name}</p>
+                    <p>Balance: $${account.balance}</p>
+                    <p>Transactions: </p>
+                    <ul>${account.transactions.map(trans => `<li>${trans.type}: $${trans.amount}</li>`).join('')}</ul>
+                `;
+            } else {
+                accountDetails.innerHTML = `<p>Account not found!</p>`;
+            }
+        }
+
+        // Deposit Money
+        function depositMoney() {
+            const accountId = parseInt(document.getElementById('accountIdTrans').value);
+            const amount = parseFloat(document.getElementById('transactionAmount').value);
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+
+            const account = accounts.find(acc => acc.accountId === accountId);
+            const transactionMessage = document.getElementById('transactionMessage');
+
+            if (account && amount > 0) {
+                account.balance += amount;
+                account.transactions.push({ type: 'Deposit', amount });
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                transactionMessage.innerHTML = `Deposit successful! New Balance: $${account.balance}`;
+            } else {
+                transactionMessage.innerHTML = `Account not found or invalid amount.`;
+            }
+        }
+
+        // Withdraw Money
+        function withdrawMoney() {
+            const accountId = parseInt(document.getElementById('accountIdTrans').value);
+            const amount = parseFloat(document.getElementById('transactionAmount').value);
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+
+            const account = accounts.find(acc => acc.accountId === accountId);
+            const transactionMessage = document.getElementById('transactionMessage');
+
+            if (account && amount > 0 && account.balance >= amount) {
+                account.balance -= amount;
+                account.transactions.push({ type: 'Withdrawal', amount });
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                transactionMessage.innerHTML = `Withdrawal successful! New Balance: $${account.balance}`;
+            } else {
+                transactionMessage.innerHTML = `Insufficient funds or invalid account.`;
+            }
+        }
+
+        // Create Fixed Deposit
+        function createFixedDeposit() {
+            const accountId = parseInt(document.getElementById('fdAccountId').value);
+            const fdAmount = parseFloat(document.getElementById('fdAmount').value);
+            const fdDuration = parseInt(document.getElementById('fdDuration').value);
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+
+            const account = accounts.find(acc => acc.accountId === accountId);
+            const fdMessage = document.getElementById('fdMessage');
+
+            if (account && fdAmount > 0 && fdDuration > 0) {
+                const interestRate = 0.05; // Example interest rate
+                const interest = fdAmount * interestRate * fdDuration;
+                const totalAmount = fdAmount + interest;
+
+                account.balance += totalAmount;
+                account.transactions.push({ type: 'Fixed Deposit', amount: totalAmount });
+
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                fdMessage.innerHTML = `FD created! Total amount after interest: $${totalAmount}`;
+            } else {
+                fdMessage.innerHTML = `Invalid FD details or Account not found.`;
+            }
+        }
+
+        // Delete Account
+        function deleteAccount() {
+            const accountId = parseInt(document.getElementById('deleteAccountId').value);
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            const deleteMessage = document.getElementById('deleteMessage');
+            
+            const accountIndex = accounts.findIndex(acc => acc.accountId === accountId);
+            if (accountIndex !== -1) {
+                // Remove account from the list
+                accounts.splice(accountIndex, 1);
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                deleteMessage.innerHTML = `Account ID ${accountId} deleted successfully.`;
+                document.getElementById('deleteAccountForm').reset();
+                updateAccountsTable(); // Update the table after deletion
+            } else {
+                deleteMessage.innerHTML = `Account with ID ${accountId} not found.`;
+            }
+        }
+
+        // Initial update of accounts table when the page loads
+        updateAccountsTable();
+    </script>
+</body>
+</html>
