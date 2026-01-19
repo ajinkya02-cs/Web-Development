@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sahyadri Hospital Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1584433144859-1fc3ab64a957?auto=format&fit=crop&w=1400&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    nav button {
+      background: transparent;
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    nav button:hover {
+      background-color: #007acc;
+    }
+
+    .info-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px;
+      gap: 20px;
+    }
+
+    .info-card {
+      background-color: rgba(0, 0, 0, 0.7);
+      width: 200px;
+      height: 200px;
+      border-radius: 15px;
+      text-align: center;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: scale(1.05);
+      background-color: rgba(0, 122, 204, 0.9);
+    }
+
+    .info-content {
+      display: none;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      margin: 10px 20px;
+      border-radius: 10px;
+    }
+
+    section {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+
+    form input, form select, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    form input, form select {
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    form button {
+      background-color: #007acc;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #005c99;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      color: black;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .actions button {
+      margin: 3px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: orange;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: red;
+      color: white;
+    }
+
+    input[type="search"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+    }
+
+    @media (max-width: 600px) {
+      .info-section {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Sahyadri Hospital Management System</h1>
+</header>
+
+<nav>
+  <button onclick="toggleInfo('about')">About Us</button>
+  <button onclick="toggleInfo('contact')">Contact Us</button>
+  <button onclick="toggleInfo('vision')">Our Vision</button>
+  <button onclick="toggleInfo('emergency')">Emergency Services</button>
+</nav>
+
+<div class="info-section">
+  <div class="info-card" onclick="toggleInfo('about')">About Us</div>
+  <div class="info-card" onclick="toggleInfo('contact')">Contact Us</div>
+  <div class="info-card" onclick="toggleInfo('vision')">Our Vision</div>
+  <div class="info-card" onclick="toggleInfo('emergency')">Emergency Services</div>
+</div>
+
+<div id="about" class="info-content">
+  <h2>About Us</h2>
+  <p>Sahyadri Hospital is committed to providing world-class healthcare and patient care services with expert doctors and modern technology.</p>
+</div>
+
+<div id="contact" class="info-content">
+  <h2>Contact Us</h2>
+  <p>Phone: +91 9579623747<br>Email: contact@sahyadrihospital.com</p>
+</div>
+
+<div id="vision" class="info-content">
+  <h2>Our Vision</h2>
+  <p>To be the leading healthcare provider known for excellence, innovation, and patient satisfaction across India.</p>
+</div>
+
+<div id="emergency" class="info-content">
+  <h2>Emergency Services</h2>
+  <p>Our 24/7 emergency unit is equipped with critical care specialists and state-of-the-art facilities for all urgent medical needs.</p>
+</div>
+
+<!-- Patient Section -->
+<section>
+  <h2>Patient Management</h2>
+  <form id="patient-form">
+    <input type="text" id="pname" placeholder="Patient Name" required>
+    <input type="number" id="page" placeholder="Age" required>
+    <input type="text" id="pgender" placeholder="Gender" required>
+    <input type="text" id="pdisease" placeholder="Disease/Condition" required>
+    <input type="tel" id="pcontact" placeholder="Contact Number" required>
+    <input type="hidden" id="pindex">
+    <button type="submit">Add / Update Patient</button>
+  </form>
+  <input type="search" id="psearch" placeholder="Search patients by name...">
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Age</th><th>Gender</th><th>Disease</th><th>Contact</th><th>Actions</th></tr>
+    </thead>
+    <tbody id="patient-table"></tbody>
+  </table>
+</section>
+
+<!-- Doctor Section -->
+<section>
+  <h2>Doctor Management</h2>
+  <form id="doctor-form">
+    <input type="text" id="dname" placeholder="Doctor Name" required>
+    <input type="text" id="dspec" placeholder="Specialization" required>
+    <input type="tel" id="dcontact" placeholder="Contact Number" required>
+    <input type="hidden" id="dindex">
+    <button type="submit">Add / Update Doctor</button>
+  </form>
+  <input type="search" id="dsearch" placeholder="Search doctors by name...">
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Specialization</th><th>Contact</th><th>Actions</th></tr>
+    </thead>
+    <tbody id="doctor-table"></tbody>
+  </table>
+</section>
+
+<!-- Appointment Section -->
+<section>
+  <h2>Appointment Management</h2>
+  <form id="appointment-form">
+    <input type="text" id="aname" placeholder="Patient Name" required>
+    <select id="adoctor" required></select>
+    <input type="datetime-local" id="adate" required>
+    <input type="hidden" id="aindex">
+    <button type="submit">Add / Update Appointment</button>
+  </form>
+  <input type="search" id="asearch" placeholder="Search appointments by patient...">
+  <table>
+    <thead>
+      <tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Actions</th></tr>
+    </thead>
+    <tbody id="appointment-table"></tbody>
+  </table>
+</section>
+
+<script>
+  function toggleInfo(id) {
+    document.querySelectorAll('.info-content').forEach(div => {
+      div.style.display = (div.id === id && div.style.display !== 'block') ? 'block' : 'none';
+    });
+  }
+
+  let patients = JSON.parse(localStorage.getItem('patients')) || [];
+  let doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+  let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+
+  function saveAll() {
+    localStorage.setItem('patients', JSON.stringify(patients));
+    localStorage.setItem('doctors', JSON.stringify(doctors));
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+  }
+
+  function renderPatients(filter = "") {
+    const table = document.getElementById("patient-table");
+    table.innerHTML = "";
+    patients.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).forEach((p, i) => {
+      table.innerHTML += `<tr>
+        <td>${p.name}</td><td>${p.age}</td><td>${p.gender}</td><td>${p.disease}</td><td>${p.contact}</td>
+        <td class="actions">
+          <button class="edit-btn" onclick="editPatient(${i})">Edit</button>
+          <button class="delete-btn" onclick="deletePatient(${i})">Delete</button>
+        </td>
+      </tr>`;
+    });
+  }
+
+  function renderDoctors(filter = "") {
+    const table = document.getElementById("doctor-table");
+    const select = document.getElementById("adoctor");
+    table.innerHTML = "";
+    select.innerHTML = '<option value="">Select Doctor</option>';
+    doctors.filter(d => d.name.toLowerCase().includes(filter.toLowerCase())).forEach((d, i) => {
+      table.innerHTML += `<tr>
+        <td>${d.name}</td><td>${d.spec}</td><td>${d.contact}</td>
+        <td class="actions">
+          <button class="edit-btn" onclick="editDoctor(${i})">Edit</button>
+          <button class="delete-btn" onclick="deleteDoctor(${i})">Delete</button>
+        </td>
+      </tr>`;
+      select.innerHTML += `<option value="${d.name}">${d.name} (${d.spec})</option>`;
+    });
+  }
+
+  function renderAppointments(filter = "") {
+    const table = document.getElementById("appointment-table");
+    table.innerHTML = "";
+    appointments.filter(a => a.name.toLowerCase().includes(filter.toLowerCase())).forEach((a, i) => {
+      table.innerHTML += `<tr>
+        <td>${a.name}</td><td>${a.doctor}</td><td>${a.date}</td>
+        <td class="actions">
+          <button class="edit-btn" onclick="editAppointment(${i})">Edit</button>
+          <button class="delete-btn" onclick="deleteAppointment(${i})">Delete</button>
+        </td>
+      </tr>`;
+    });
+  }
+
+  function editPatient(i) {
+    const p = patients[i];
+    document.getElementById("pname").value = p.name;
+    document.getElementById("page").value = p.age;
+    document.getElementById("pgender").value = p.gender;
+    document.getElementById("pdisease").value = p.disease;
+    document.getElementById("pcontact").value = p.contact;
+    document.getElementById("pindex").value = i;
+  }
+
+  function deletePatient(i) {
+    if (confirm("Are you sure?")) {
+      patients.splice(i, 1);
+      saveAll();
+      renderPatients();
+    }
+  }
+
+  function editDoctor(i) {
+    const d = doctors[i];
+    document.getElementById("dname").value = d.name;
+    document.getElementById("dspec").value = d.spec;
+    document.getElementById("dcontact").value = d.contact;
+    document.getElementById("dindex").value = i;
+  }
+
+  function deleteDoctor(i) {
+    if (confirm("Are you sure?")) {
+      doctors.splice(i, 1);
+      saveAll();
+      renderDoctors();
+    }
+  }
+
+  function editAppointment(i) {
+    const a = appointments[i];
+    document.getElementById("aname").value = a.name;
+    document.getElementById("adoctor").value = a.doctor;
+    document.getElementById("adate").value = a.date;
+    document.getElementById("aindex").value = i;
+  }
+
+  function deleteAppointment(i) {
+    if (confirm("Are you sure?")) {
+      appointments.splice(i, 1);
+      saveAll();
+      renderAppointments();
+    }
+  }
+
+  document.getElementById("patient-form").onsubmit = e => {
+    e.preventDefault();
+    const index = document.getElementById("pindex").value;
+    const data = {
+      name: pname.value,
+      age: page.value,
+      gender: pgender.value,
+      disease: pdisease.value,
+      contact: pcontact.value
+    };
+    if (index === "") patients.push(data);
+    else patients[index] = data;
+    saveAll();
+    renderPatients();
+    e.target.reset();
+    document.getElementById("pindex").value = "";
+  };
+
+  document.getElementById("doctor-form").onsubmit = e => {
+    e.preventDefault();
+    const index = document.getElementById("dindex").value;
+    const data = {
+      name: dname.value,
+      spec: dspec.value,
+      contact: dcontact.value
+    };
+    if (index === "") doctors.push(data);
+    else doctors[index] = data;
+    saveAll();
+    renderDoctors();
+    e.target.reset();
+    document.getElementById("dindex").value = "";
+  };
+
+  document.getElementById("appointment-form").onsubmit = e => {
+    e.preventDefault();
+    const index = document.getElementById("aindex").value;
+    const data = {
+      name: aname.value,
+      doctor: adoctor.value,
+      date: adate.value
+    };
+    if (index === "") appointments.push(data);
+    else appointments[index] = data;
+    saveAll();
+    renderAppointments();
+    e.target.reset();
+    document.getElementById("aindex").value = "";
+  };
+
+  document.getElementById("psearch").oninput = e => renderPatients(e.target.value);
+  document.getElementById("dsearch").oninput = e => renderDoctors(e.target.value);
+  document.getElementById("asearch").oninput = e => renderAppointments(e.target.value);
+
+  renderPatients();
+  renderDoctors();
+  renderAppointments();
+</script>
+</body>
+</html>
