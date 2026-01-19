@@ -1,0 +1,89 @@
+/* Reset some default styles */
+body, h1, h2, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Profile container */
+.profile-container {
+    background: lightgray;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    overflow: hidden;
+}
+
+/* Header section */
+.profile-header {
+    text-align: center;
+    background: lightblue;
+    color:black;
+    padding: 20px;
+}
+
+.profile-photo {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.student-name {
+    font-size: 24px;
+    margin: 0;
+}
+
+.student-email {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Body section */
+.profile-body {
+    padding: 20px;
+}
+
+.student-info, .academic-info {
+    margin-bottom: 20px;
+}
+
+.student-info h2, .academic-info h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.academic-info ul {
+    list-style-type: none;
+}
+
+.academic-info li {
+    margin-bottom: 5px;
+}
+
+/* Footer section */
+.profile-footer {
+    text-align: center;
+    background: lightblue;
+    padding: 10px;
+}
+
+.contact-link {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
